@@ -77,11 +77,11 @@ Add screenshots here before or after publishing the repository.
 
 Example markdown:
 
-```md
+### Builder UI
 ![Builder UI](assets/builder-ui.png)
-![Template Preview](assets/template-preview.png)
-```
 
+### Template Preview
+![Template Preview](assets/template-preview.png)
 ## Roadmap
 
 - Add more ready-made website templates
