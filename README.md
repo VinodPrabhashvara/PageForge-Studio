@@ -78,8 +78,8 @@ Add screenshots here before or after publishing the repository.
 Example markdown:
 
 ```md
-![Builder UI](assets/screenshots/builder-ui.png)
-![Export Preview](assets/screenshots/export-preview.png)
+![Builder UI](assets/Screenshot 2026-05-09 105337.png)
+![Template Preview](assets/Screenshot 2026-05-09 105322.png)
 ```
 
 ## Roadmap
