@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PageForge Studio</title>
+  <meta
+    name="description"
+    content="PageForge Studio is an offline drag-and-drop website builder that runs entirely in your browser."
+  >
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-cluster">
+        <div class="brand">
+          <img src="assets/logo.svg" alt="PageForge Studio logo" class="brand-logo">
+          <div class="brand-copy">
+            <p class="eyebrow">Offline Website Builder</p>
+            <h1>PageForge Studio</h1>
+          </div>
+        </div>
+
+        <label class="project-file-field">
+          <span>Project File</span>
+          <input id="projectNameInput" type="text" value="pageforge-studio-home" placeholder="pageforge-studio-home">
+        </label>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="button-row">
+          <button id="newProjectBtn" class="toolbar-button" type="button">New</button>
+          <button id="saveProjectBtn" class="toolbar-button" type="button">Save</button>
+          <button id="loadProjectBtn" class="toolbar-button" type="button">Load</button>
+          <button id="exportHtmlBtn" class="toolbar-button toolbar-button-primary" type="button">Export HTML</button>
+        </div>
+
+        <div class="preview-switcher" aria-label="Preview modes">
+          <button id="previewDesktopBtn" class="preview-button is-active" type="button" data-preview-mode="desktop">Desktop</button>
+          <button id="previewTabletBtn" class="preview-button" type="button" data-preview-mode="tablet">Tablet</button>
+          <button id="previewMobileBtn" class="preview-button" type="button" data-preview-mode="mobile">Mobile</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="panel panel-left">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Sidebar</p>
+            <h2>Elements</h2>
+          </div>
+        </div>
+
+        <div class="block-library" id="blockLibrary">
+          <button class="library-item" type="button" draggable="true" data-template="heading">
+            <strong>Heading</strong>
+            <span>Titles, hero intros, and section headlines.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="paragraph">
+            <strong>Paragraph</strong>
+            <span>Flexible body copy for long-form content.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="button">
+            <strong>Button</strong>
+            <span>Calls to action with editable text and links.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="image">
+            <strong>Image</strong>
+            <span>Visual block with editable source URL and caption.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="hero">
+            <strong>Hero Section</strong>
+            <span>Large intro area for a landing page opening.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="card">
+            <strong>Card</strong>
+            <span>Highlight a feature, service, or product offer.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="navbar">
+            <strong>Navbar</strong>
+            <span>Header navigation strip with brand and links.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="footer">
+            <strong>Footer</strong>
+            <span>Close a page with brand and legal details.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="contact">
+            <strong>Contact Form</strong>
+            <span>Simple form section for inquiries and leads.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="divider">
+            <strong>Divider</strong>
+            <span>Separate sections with a clean horizontal rule.</span>
+          </button>
+          <button class="library-item" type="button" draggable="true" data-template="spacer">
+            <strong>Spacer</strong>
+            <span>Add controlled breathing room between blocks.</span>
+          </button>
+        </div>
+
+        <section class="template-library">
+          <div class="panel-header panel-header-compact">
+            <div>
+              <p class="eyebrow">Templates</p>
+              <h2>Quick Starts</h2>
+            </div>
+          </div>
+
+          <div class="template-grid">
+            <button class="template-item" type="button" data-page-template="portfolio">
+              <strong>Portfolio</strong>
+              <span>Creative studio layout with featured work and contact flow.</span>
+            </button>
+            <button class="template-item" type="button" data-page-template="business">
+              <strong>Business Landing</strong>
+              <span>Service-focused page built to capture leads and consultations.</span>
+            </button>
+            <button class="template-item" type="button" data-page-template="product">
+              <strong>Product Page</strong>
+              <span>Launch-ready product story with features, imagery, and CTA.</span>
+            </button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="canvas-stage">
+        <div class="canvas-stage-header">
+          <div>
+            <p class="eyebrow">Builder Canvas</p>
+            <h2>Website Preview</h2>
+          </div>
+          <p id="statusBadge" class="status-badge">Ready</p>
+        </div>
+
+        <div class="canvas-wrapper">
+          <div id="canvasViewport" class="canvas-viewport" data-preview="desktop">
+            <div id="canvasDropzone" class="canvas-dropzone" aria-label="Website canvas">
+              <div id="canvas" class="page-canvas"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel panel-right">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Inspector</p>
+            <h2>Style Editor</h2>
+          </div>
+        </div>
+
+        <form id="inspectorForm" class="inspector-form" autocomplete="off">
+          <p id="editorHelperText" class="editor-helper">Select an element to edit it.</p>
+
+          <div class="field-group">
+            <label for="blockTypeField">Selected element</label>
+            <input id="blockTypeField" type="text" value="None selected" readonly>
+          </div>
+
+          <div class="field-group" data-editor-control="text">
+            <label for="textContentInput">Text content</label>
+            <textarea id="textContentInput" rows="4" placeholder="Edit the selected text"></textarea>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="fontSizeInput">Font size</label>
+              <input id="fontSizeInput" type="text" placeholder="32px">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="textColorInput">Text color</label>
+              <input id="textColorInput" type="color" value="#f5f7fb">
+            </div>
+
+            <div class="field-group">
+              <label for="backgroundColorInput">Background color</label>
+              <input id="backgroundColorInput" type="color" value="#171d29">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="paddingInput">Padding</label>
+              <input id="paddingInput" type="text" placeholder="24px">
+            </div>
+
+            <div class="field-group">
+              <label for="marginInput">Margin</label>
+              <input id="marginInput" type="text" placeholder="0 0 16px">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="radiusInput">Border radius</label>
+              <input id="radiusInput" type="text" placeholder="20px">
+            </div>
+
+            <div class="field-group">
+              <label for="widthInput">Width</label>
+              <input id="widthInput" type="text" placeholder="100%">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="heightInput">Height</label>
+              <input id="heightInput" type="text" placeholder="auto">
+            </div>
+          </div>
+
+          <div class="field-group" data-editor-control="align">
+            <label for="alignInput">Text align</label>
+            <select id="alignInput">
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+
+          <div class="field-group" data-editor-control="link">
+            <label for="linkInput">Link URL</label>
+            <input id="linkInput" type="text" placeholder="https://example.com">
+          </div>
+
+          <section class="heading-inspector" data-editor-control="heading" hidden>
+            <p class="actions-title">Heading Controls</p>
+
+            <div class="field-group">
+              <label for="headingTextInput">Heading text</label>
+              <textarea id="headingTextInput" rows="3" placeholder="Your heading"></textarea>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="headingTagInput">Heading tag</label>
+                <select id="headingTagInput">
+                  <option value="h1">H1</option>
+                  <option value="h2">H2</option>
+                  <option value="h3">H3</option>
+                  <option value="h4">H4</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="headingLinkUrlInput">Link URL optional</label>
+                <input id="headingLinkUrlInput" type="text" placeholder="https://example.com">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="headingFontSizeInput">Font size</label>
+                <input id="headingFontSizeInput" type="text" placeholder="2.25rem">
+              </div>
+
+              <div class="field-group">
+                <label for="headingFontWeightInput">Font weight</label>
+                <input id="headingFontWeightInput" type="text" placeholder="700">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="headingTextColorInput">Text color</label>
+                <input id="headingTextColorInput" type="color" value="#17202c">
+              </div>
+
+              <div class="field-group">
+                <label for="headingAlignInput">Text align</label>
+                <select id="headingAlignInput">
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="headingLineHeightInput">Line height</label>
+                <input id="headingLineHeightInput" type="text" placeholder="1.1">
+              </div>
+
+              <div class="field-group">
+                <label for="headingLetterSpacingInput">Letter spacing</label>
+                <input id="headingLetterSpacingInput" type="text" placeholder="-0.04em">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="headingMarginInput">Margin</label>
+                <input id="headingMarginInput" type="text" placeholder="0 0 16px">
+              </div>
+
+              <div class="field-group">
+                <label for="headingPaddingInput">Padding</label>
+                <input id="headingPaddingInput" type="text" placeholder="24px">
+              </div>
+            </div>
+          </section>
+
+          <section class="paragraph-inspector" data-editor-control="paragraph" hidden>
+            <p class="actions-title">Paragraph Controls</p>
+
+            <div class="field-group">
+              <label for="paragraphTextInput">Paragraph text</label>
+              <textarea id="paragraphTextInput" rows="4" placeholder="Your paragraph"></textarea>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="paragraphFontSizeInput">Font size</label>
+                <input id="paragraphFontSizeInput" type="text" placeholder="1rem">
+              </div>
+
+              <div class="field-group">
+                <label for="paragraphFontWeightInput">Font weight</label>
+                <input id="paragraphFontWeightInput" type="text" placeholder="400">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="paragraphTextColorInput">Text color</label>
+                <input id="paragraphTextColorInput" type="color" value="#516074">
+              </div>
+
+              <div class="field-group">
+                <label for="paragraphAlignInput">Text align</label>
+                <select id="paragraphAlignInput">
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="paragraphLineHeightInput">Line height</label>
+                <input id="paragraphLineHeightInput" type="text" placeholder="1.7">
+              </div>
+
+              <div class="field-group">
+                <label for="paragraphLetterSpacingInput">Letter spacing</label>
+                <input id="paragraphLetterSpacingInput" type="text" placeholder="0">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="paragraphMaxWidthInput">Max width</label>
+                <input id="paragraphMaxWidthInput" type="text" placeholder="60ch">
+              </div>
+
+              <div class="field-group">
+                <label for="paragraphMarginInput">Margin</label>
+                <input id="paragraphMarginInput" type="text" placeholder="0 auto 16px">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="paragraphPaddingInput">Padding</label>
+              <input id="paragraphPaddingInput" type="text" placeholder="0">
+            </div>
+          </section>
+
+          <section class="footer-inspector" data-editor-control="footer" hidden>
+            <p class="actions-title">Footer Controls</p>
+
+            <div class="field-group">
+              <label for="footerBrandTextInput">Brand text</label>
+              <input id="footerBrandTextInput" type="text" placeholder="PageForge Studio">
+            </div>
+
+            <div class="field-group">
+              <label for="footerDescriptionTextInput">Footer description</label>
+              <textarea id="footerDescriptionTextInput" rows="3" placeholder="Footer description"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label for="footerCopyrightTextInput">Copyright text</label>
+              <input id="footerCopyrightTextInput" type="text" placeholder="Copyright 2026 PageForge Studio. All rights reserved.">
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="footerLink1TextInput">Link 1 text</label>
+                <input id="footerLink1TextInput" type="text" placeholder="About">
+              </div>
+
+              <div class="field-group">
+                <label for="footerLink1UrlInput">Link 1 URL</label>
+                <input id="footerLink1UrlInput" type="text" placeholder="#about">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="footerLink2TextInput">Link 2 text</label>
+                <input id="footerLink2TextInput" type="text" placeholder="Privacy">
+              </div>
+
+              <div class="field-group">
+                <label for="footerLink2UrlInput">Link 2 URL</label>
+                <input id="footerLink2UrlInput" type="text" placeholder="#privacy">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="footerLink3TextInput">Link 3 text</label>
+                <input id="footerLink3TextInput" type="text" placeholder="Contact">
+              </div>
+
+              <div class="field-group">
+                <label for="footerLink3UrlInput">Link 3 URL</label>
+                <input id="footerLink3UrlInput" type="text" placeholder="#contact">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="footerBackgroundColorInput">Background color</label>
+                <input id="footerBackgroundColorInput" type="color" value="#0f1521">
+              </div>
+
+              <div class="field-group">
+                <label for="footerTextColorInput">Text color</label>
+                <input id="footerTextColorInput" type="color" value="#eaf0fb">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="footerLinkColorInput">Link color</label>
+                <input id="footerLinkColorInput" type="color" value="#9eb0ca">
+              </div>
+
+              <div class="field-group">
+                <label for="footerAlignInput">Text align</label>
+                <select id="footerAlignInput">
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="footerPaddingInput">Padding</label>
+                <input id="footerPaddingInput" type="text" placeholder="28px">
+              </div>
+
+              <div class="field-group">
+                <label for="footerRadiusInput">Border radius</label>
+                <input id="footerRadiusInput" type="text" placeholder="24px">
+              </div>
+            </div>
+          </section>
+
+          <section class="button-inspector" data-editor-control="button-element" hidden>
+            <p class="actions-title">Button Controls</p>
+
+            <div class="field-group">
+              <label for="buttonElementTextInput">Button text</label>
+              <input id="buttonElementTextInput" type="text" placeholder="Click here">
+            </div>
+
+            <div class="field-group">
+              <label for="buttonElementUrlInput">Button URL</label>
+              <input id="buttonElementUrlInput" type="text" placeholder="https://example.com">
+            </div>
+
+            <div class="field-group">
+              <label for="buttonOpenInNewTabInput">Open in new tab</label>
+              <input id="buttonOpenInNewTabInput" type="checkbox">
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="buttonBackgroundColorInput">Background color</label>
+                <input id="buttonBackgroundColorInput" type="color" value="#3f6ff5">
+              </div>
+
+              <div class="field-group">
+                <label for="buttonTextColorInput">Text color</label>
+                <input id="buttonTextColorInput" type="color" value="#f9fbff">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="buttonPaddingSpecialInput">Padding</label>
+                <input id="buttonPaddingSpecialInput" type="text" placeholder="0 24px">
+              </div>
+
+              <div class="field-group">
+                <label for="buttonRadiusSpecialInput">Border radius</label>
+                <input id="buttonRadiusSpecialInput" type="text" placeholder="999px">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="buttonWidthSpecialInput">Width</label>
+                <input id="buttonWidthSpecialInput" type="text" placeholder="auto">
+              </div>
+
+              <div class="field-group">
+                <label for="buttonAlignSpecialInput">Alignment</label>
+                <select id="buttonAlignSpecialInput">
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <div class="field-group" data-editor-control="image">
+            <label for="imageUrlInput">Image URL</label>
+            <input id="imageUrlInput" type="text" placeholder="https://example.com/image.jpg">
+          </div>
+
+          <section class="image-inspector" data-editor-control="image-element" hidden>
+            <p class="actions-title">Image Controls</p>
+
+            <div class="field-group">
+              <label for="imageElementUrlInput">Image URL</label>
+              <input id="imageElementUrlInput" type="text" placeholder="https://example.com/image.jpg">
+            </div>
+
+            <div class="field-group">
+              <label for="imageAltTextInput">Alt text</label>
+              <input id="imageAltTextInput" type="text" placeholder="Describe the image">
+            </div>
+
+            <div class="field-group">
+              <label for="imageCaptionTextInput">Caption text</label>
+              <textarea id="imageCaptionTextInput" rows="3" placeholder="Add a caption"></textarea>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="imageWidthInput">Width</label>
+                <input id="imageWidthInput" type="text" placeholder="100%">
+              </div>
+
+              <div class="field-group">
+                <label for="imageHeightSpecialInput">Height</label>
+                <input id="imageHeightSpecialInput" type="text" placeholder="320px">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="imageObjectFitInput">Object fit</label>
+                <select id="imageObjectFitInput">
+                  <option value="cover">Cover</option>
+                  <option value="contain">Contain</option>
+                  <option value="fill">Fill</option>
+                  <option value="scale-down">Scale Down</option>
+                  <option value="none">None</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="imageRadiusSpecialInput">Border radius</label>
+                <input id="imageRadiusSpecialInput" type="text" placeholder="24px">
+              </div>
+            </div>
+          </section>
+
+          <section class="hero-inspector" data-editor-control="hero" hidden>
+            <p class="actions-title">Hero Controls</p>
+
+            <div class="field-group">
+              <label for="heroBadgeTextInput">Badge text</label>
+              <input id="heroBadgeTextInput" type="text" placeholder="Featured">
+            </div>
+
+            <div class="field-group">
+              <label for="heroHeadingTextInput">Heading text</label>
+              <textarea id="heroHeadingTextInput" rows="3" placeholder="Hero heading"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label for="heroParagraphTextInput">Paragraph text</label>
+              <textarea id="heroParagraphTextInput" rows="4" placeholder="Hero supporting text"></textarea>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="heroButtonTextInput">Button text</label>
+                <input id="heroButtonTextInput" type="text" placeholder="Learn more">
+              </div>
+
+              <div class="field-group">
+                <label for="heroButtonUrlInput">Button URL</label>
+                <input id="heroButtonUrlInput" type="text" placeholder="#learn-more">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="heroBackgroundColorInput">Background color</label>
+                <input id="heroBackgroundColorInput" type="color" value="#0f1726">
+              </div>
+
+              <div class="field-group">
+                <label for="heroHeadingColorInput">Heading color</label>
+                <input id="heroHeadingColorInput" type="color" value="#f5f8ff">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="heroParagraphColorInput">Paragraph color</label>
+                <input id="heroParagraphColorInput" type="color" value="#d2dcf0">
+              </div>
+
+              <div class="field-group">
+                <label for="heroButtonBackgroundColorInput">Button background</label>
+                <input id="heroButtonBackgroundColorInput" type="color" value="#3f6ff5">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="heroButtonTextColorInput">Button text color</label>
+                <input id="heroButtonTextColorInput" type="color" value="#f9fbff">
+              </div>
+
+              <div class="field-group">
+                <label for="heroAlignInput">Content alignment</label>
+                <select id="heroAlignInput">
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="card-inspector" data-editor-control="card" hidden>
+            <p class="actions-title">Card Controls</p>
+
+            <div class="field-group">
+              <label for="cardLabelTextInput">Small label text</label>
+              <input id="cardLabelTextInput" type="text" placeholder="Featured Card">
+            </div>
+
+            <div class="field-group">
+              <label for="cardTitleTextInput">Card title</label>
+              <textarea id="cardTitleTextInput" rows="3" placeholder="Card title"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label for="cardDescriptionTextInput">Card description</label>
+              <textarea id="cardDescriptionTextInput" rows="4" placeholder="Card description"></textarea>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="cardButtonTextInput">Button text</label>
+                <input id="cardButtonTextInput" type="text" placeholder="View details">
+              </div>
+
+              <div class="field-group">
+                <label for="cardButtonUrlInput">Button URL</label>
+                <input id="cardButtonUrlInput" type="text" placeholder="#details">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="cardBackgroundColorInput">Card background</label>
+                <input id="cardBackgroundColorInput" type="color" value="#ffffff">
+              </div>
+
+              <div class="field-group">
+                <label for="cardTitleColorInput">Title color</label>
+                <input id="cardTitleColorInput" type="color" value="#17202c">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="cardTextColorInput">Text color</label>
+                <input id="cardTextColorInput" type="color" value="#516074">
+              </div>
+
+              <div class="field-group">
+                <label for="cardButtonBackgroundColorInput">Button background</label>
+                <input id="cardButtonBackgroundColorInput" type="color" value="#3f6ff5">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="cardRadiusInput">Border radius</label>
+                <input id="cardRadiusInput" type="text" placeholder="24px">
+              </div>
+
+              <div class="field-group">
+                <label for="cardPaddingInput">Padding</label>
+                <input id="cardPaddingInput" type="text" placeholder="28px">
+              </div>
+            </div>
+          </section>
+
+          <section class="navbar-inspector" data-editor-control="navbar" hidden>
+            <p class="actions-title">Navbar Controls</p>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="navbarBrandTextInput">Brand text</label>
+                <input id="navbarBrandTextInput" type="text" placeholder="Brand name">
+              </div>
+
+              <div class="field-group">
+                <label for="navbarBrandUrlInput">Brand URL</label>
+                <input id="navbarBrandUrlInput" type="text" placeholder="#home">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="navbarLink1TextInput">Link 1 text</label>
+                <input id="navbarLink1TextInput" type="text" placeholder="Home">
+              </div>
+
+              <div class="field-group">
+                <label for="navbarLink1UrlInput">Link 1 URL</label>
+                <input id="navbarLink1UrlInput" type="text" placeholder="#home">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="navbarLink2TextInput">Link 2 text</label>
+                <input id="navbarLink2TextInput" type="text" placeholder="Services">
+              </div>
+
+              <div class="field-group">
+                <label for="navbarLink2UrlInput">Link 2 URL</label>
+                <input id="navbarLink2UrlInput" type="text" placeholder="#services">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="navbarLink3TextInput">Link 3 text</label>
+                <input id="navbarLink3TextInput" type="text" placeholder="About">
+              </div>
+
+              <div class="field-group">
+                <label for="navbarLink3UrlInput">Link 3 URL</label>
+                <input id="navbarLink3UrlInput" type="text" placeholder="#about">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="navbarLink4TextInput">Link 4 text</label>
+                <input id="navbarLink4TextInput" type="text" placeholder="Contact">
+              </div>
+
+              <div class="field-group">
+                <label for="navbarLink4UrlInput">Link 4 URL</label>
+                <input id="navbarLink4UrlInput" type="text" placeholder="#contact">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="navbarCtaTextInput">CTA button text</label>
+                <input id="navbarCtaTextInput" type="text" placeholder="Start now">
+              </div>
+
+              <div class="field-group">
+                <label for="navbarCtaUrlInput">CTA button URL</label>
+                <input id="navbarCtaUrlInput" type="text" placeholder="#cta">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="navbarBackgroundColorInput">Navbar background</label>
+                <input id="navbarBackgroundColorInput" type="color" value="#0f1521">
+              </div>
+
+              <div class="field-group">
+                <label for="navbarLinkColorInput">Link color</label>
+                <input id="navbarLinkColorInput" type="color" value="#a7b5cc">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="navbarCtaBackgroundColorInput">CTA background</label>
+                <input id="navbarCtaBackgroundColorInput" type="color" value="#3f6ff5">
+              </div>
+
+              <div class="field-group">
+                <label for="navbarCtaTextColorInput">CTA text color</label>
+                <input id="navbarCtaTextColorInput" type="color" value="#f9fbff">
+              </div>
+            </div>
+          </section>
+
+          <section class="contact-form-inspector" data-editor-control="contact-form" hidden>
+            <p class="actions-title">Contact Form Controls</p>
+
+            <div class="field-group">
+              <label for="contactFormTitleInput">Form title</label>
+              <textarea id="contactFormTitleInput" rows="3" placeholder="Contact form title"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label for="contactFormDescriptionInput">Form description</label>
+              <textarea id="contactFormDescriptionInput" rows="4" placeholder="Contact form description"></textarea>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="contactFormNamePlaceholderInput">Name placeholder</label>
+                <input id="contactFormNamePlaceholderInput" type="text" placeholder="Your name">
+              </div>
+
+              <div class="field-group">
+                <label for="contactFormEmailPlaceholderInput">Email placeholder</label>
+                <input id="contactFormEmailPlaceholderInput" type="text" placeholder="Email address">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="contactFormMessagePlaceholderInput">Message placeholder</label>
+              <input id="contactFormMessagePlaceholderInput" type="text" placeholder="Tell us about your project">
+            </div>
+
+            <div class="field-group">
+              <label for="contactFormButtonTextInput">Button text</label>
+              <input id="contactFormButtonTextInput" type="text" placeholder="Send message">
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="contactFormBackgroundColorInput">Form background</label>
+                <input id="contactFormBackgroundColorInput" type="color" value="#ffffff">
+              </div>
+
+              <div class="field-group">
+                <label for="contactFormInputBackgroundColorInput">Input background</label>
+                <input id="contactFormInputBackgroundColorInput" type="color" value="#ffffff">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="contactFormInputTextColorInput">Input text color</label>
+                <input id="contactFormInputTextColorInput" type="color" value="#17202c">
+              </div>
+
+              <div class="field-group">
+                <label for="contactFormButtonBackgroundColorInput">Button background</label>
+                <input id="contactFormButtonBackgroundColorInput" type="color" value="#3f6ff5">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="contactFormButtonTextColorInput">Button text color</label>
+                <input id="contactFormButtonTextColorInput" type="color" value="#f9fbff">
+              </div>
+
+              <div class="field-group">
+                <label for="contactFormBorderRadiusInput">Border radius</label>
+                <input id="contactFormBorderRadiusInput" type="text" placeholder="24px">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="contactFormPaddingInput">Padding</label>
+                <input id="contactFormPaddingInput" type="text" placeholder="28px">
+              </div>
+
+              <div class="field-group">
+                <label for="contactFormWidthInput">Width</label>
+                <input id="contactFormWidthInput" type="text" placeholder="100%">
+              </div>
+            </div>
+          </section>
+
+          <section class="divider-inspector" data-editor-control="divider" hidden>
+            <p class="actions-title">Divider Controls</p>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="dividerWidthInput">Divider width</label>
+                <input id="dividerWidthInput" type="text" placeholder="100%">
+              </div>
+
+              <div class="field-group">
+                <label for="dividerHeightInput">Divider height</label>
+                <input id="dividerHeightInput" type="text" placeholder="2px">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="dividerColorInput">Divider color</label>
+                <input id="dividerColorInput" type="color" value="#1f2937">
+              </div>
+
+              <div class="field-group">
+                <label for="dividerStyleInput">Divider style</label>
+                <select id="dividerStyleInput">
+                  <option value="solid">Solid</option>
+                  <option value="dashed">Dashed</option>
+                  <option value="dotted">Dotted</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="dividerMarginTopInput">Margin top</label>
+                <input id="dividerMarginTopInput" type="text" placeholder="0">
+              </div>
+
+              <div class="field-group">
+                <label for="dividerMarginBottomInput">Margin bottom</label>
+                <input id="dividerMarginBottomInput" type="text" placeholder="0">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="dividerAlignInput">Alignment</label>
+              <select id="dividerAlignInput">
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </section>
+
+          <section class="spacer-inspector" data-editor-control="spacer" hidden>
+            <p class="actions-title">Spacer Controls</p>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="spacerHeightInput">Height</label>
+                <input id="spacerHeightInput" type="text" placeholder="72px">
+              </div>
+
+              <div class="field-group">
+                <label for="spacerBackgroundColorInput">Background color</label>
+                <input id="spacerBackgroundColorInput" type="color" value="#eff4ff">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="spacerRadiusInput">Border radius</label>
+                <input id="spacerRadiusInput" type="text" placeholder="16px">
+              </div>
+
+              <div class="field-group">
+                <label for="spacerMarginTopInput">Margin top</label>
+                <input id="spacerMarginTopInput" type="text" placeholder="0">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="spacerMarginBottomInput">Margin bottom</label>
+              <input id="spacerMarginBottomInput" type="text" placeholder="0">
+            </div>
+          </section>
+
+          <div class="editor-actions">
+            <p class="actions-title">Selected Element Actions</p>
+            <div class="action-grid">
+              <button id="duplicateBlockBtn" class="action-button" type="button">Duplicate</button>
+              <button id="moveUpBlockBtn" class="action-button" type="button">Move Up</button>
+              <button id="moveDownBlockBtn" class="action-button" type="button">Move Down</button>
+              <button id="deleteBlockBtn" class="action-button action-button-danger" type="button">Delete</button>
+            </div>
+          </div>
+        </form>
+      </aside>
+    </main>
+  </div>
+
+  <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/templates.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/editor.js" defer></script>
+  <script src="js/dragdrop.js" defer></script>
+  <script src="js/exporter.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
