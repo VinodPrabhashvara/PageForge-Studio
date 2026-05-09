@@ -1,4 +1,4 @@
-node_modules/
+git push -u origin mainnode_modules/
 dist/
 .env
 .DS_Store
